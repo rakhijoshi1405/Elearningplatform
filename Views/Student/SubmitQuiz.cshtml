@@ -1,0 +1,122 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Quiz Result";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .result-box {
+        max-width: 500px;
+        margin: 40px auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        padding: 30px;
+        text-align: center;
+    }
+
+    .result-title {
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    .score-circle {
+        width: 150px;
+        height: 150px;
+        background: #667eea;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+    }
+
+    .score-number {
+        font-size: 40px;
+        font-weight: bold;
+    }
+
+    .score-text {
+        font-size: 14px;
+    }
+
+    .percentage {
+        font-size: 18px;
+        margin-top: 5px;
+    }
+
+    .status-pass {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+
+    .status-fail {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+
+    .btn-back {
+        background: #667eea;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 25px;
+        text-decoration: none;
+        display: inline-block;
+        margin: 5px;
+    }
+
+    .btn-try {
+        background: #28a745;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 25px;
+        text-decoration: none;
+        display: inline-block;
+        margin: 5px;
+    }
+
+        .btn-back:hover, .btn-try:hover {
+            opacity: 0.8;
+            text-decoration: none;
+            color: white;
+        }
+</style>
+
+<div class="result-box">
+    <h2 class="result-title">Quiz Result</h2>
+    <p style="color: #666; margin-bottom: 20px;">@ViewBag.Quiz.Title</p>
+
+    <div class="score-circle">
+        <div class="score-number">@ViewBag.Score</div>
+        <div class="score-text">out of @ViewBag.TotalQuestions</div>
+        <div class="percentage">(@ViewBag.Percentage%)</div>
+    </div>
+
+    @if (ViewBag.IsPassed == true)
+    {
+        <div class="status-pass">
+            🎉 Congratulations! You passed the quiz!
+        </div>
+    }
+    else
+    {
+        <div class="status-fail">
+            😢 Sorry! You did not pass the quiz. Try again!
+        </div>
+    }
+
+    <div>
+        <a href="/Student/MyCourses" class="btn-back">Back to Courses</a>
+        <a href="/Student/AvailableQuizzes?courseId=@ViewBag.Quiz.CourseId" class="btn-try">Try Again</a>
+    </div>
+</div>

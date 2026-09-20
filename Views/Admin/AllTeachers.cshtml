@@ -1,0 +1,52 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "All Teachers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>All Teachers</h2>
+
+@if (ViewBag.Teachers != null && ((System.Collections.IList)ViewBag.Teachers).Count > 0)
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var teacher in ViewBag.Teachers)
+            {
+                <tr>
+                    <td>@teacher.Username</td>
+                    <td>@teacher.Email</td>
+                    <td>@teacher.CreatedDate.ToString("MM/dd/yyyy")</td>
+                    <td>
+                        @if (teacher.IsApproved)
+                        {
+                            <span class="label label-success">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="label label-warning">Pending</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        <p>No teachers found in the system.</p>
+    </div>
+}
+
+<div>
+    <a href="/Admin/Index" class="btn btn-default">Back to Dashboard</a>
+</div>

@@ -1,0 +1,45 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Pending Teacher Approvals";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Pending Teacher Approvals</h2>
+
+@if (ViewBag.PendingTeachers != null && ((System.Collections.IList)ViewBag.PendingTeachers).Count > 0)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Registration Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var teacher in ViewBag.PendingTeachers)
+            {
+                <tr>
+                    <td>@teacher.Username</td>
+                    <td>@teacher.Email</td>
+                    <td>@teacher.CreatedDate.ToString("MM/dd/yyyy")</td>
+                    <td>
+                        <a href="/Admin/ApproveTeacher?id=@teacher.UserId" class="btn btn-success btn-sm">Approve</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-success">
+        <p>No pending teacher approvals! All teachers are approved.</p>
+    </div>
+}
+
+<div>
+    <a href="/Admin/Index" class="btn btn-default">Back to Dashboard</a>
+</div>

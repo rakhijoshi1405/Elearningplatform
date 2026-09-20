@@ -1,0 +1,299 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Start Quiz";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .quiz-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .quiz-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 16px;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+        .quiz-header h2 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .quiz-header p {
+            margin: 8px 0 0;
+            opacity: 0.9;
+        }
+
+    .progress-section {
+        background: #f0f0f0;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 25px;
+    }
+
+    .progress-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 13px;
+        color: #666;
+    }
+
+    .progress-bar {
+        height: 8px;
+        background: #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+        border-radius: 10px;
+        transition: width 0.3s ease;
+        width: 0%;
+    }
+
+    .question-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        margin-bottom: 25px;
+        overflow: hidden;
+    }
+
+    .question-header {
+        background: #f8f9fa;
+        padding: 18px 22px;
+        border-bottom: 2px solid #667eea;
+    }
+
+        .question-header strong {
+            font-size: 16px;
+            color: #333;
+        }
+
+    .question-body {
+        padding: 20px 22px;
+    }
+
+    .option {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 12px 18px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid #e0e0e0;
+    }
+
+        .option:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+            .option.selected label {
+                color: white;
+            }
+
+        .option input {
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .option label {
+            cursor: pointer;
+            margin: 0;
+            font-size: 15px;
+            font-weight: 500;
+            color: #333;
+            width: calc(100% - 30px);
+            display: inline-block;
+        }
+
+    .quiz-footer {
+        text-align: center;
+        margin-top: 30px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 16px;
+    }
+
+    .btn-submit {
+        background: #28a745;
+        color: white;
+        padding: 12px 40px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-right: 15px;
+    }
+
+        .btn-submit:hover {
+            background: #218838;
+            transform: scale(1.02);
+        }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+        padding: 12px 35px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+        .btn-cancel:hover {
+            background: #5a6268;
+            text-decoration: none;
+            color: white;
+        }
+</style>
+
+<div class="quiz-container">
+    <div class="quiz-header">
+        <h2>📝 @ViewBag.Quiz.Title</h2>
+        <p>Total Questions: @ViewBag.QuestionsCount</p>
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-label">
+            <span>Progress</span>
+            <span id="answeredCount">0 / @ViewBag.QuestionsCount</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <form method="post" action="/Student/SubmitQuiz" id="quizForm">
+        <input type="hidden" name="quizId" value="@ViewBag.Quiz.QuizId" />
+
+        @{
+            int counter = 1;
+        }
+
+        @if (ViewBag.Questions != null)
+        {
+            foreach (var q in ViewBag.Questions)
+            {
+                <div class="question-card">
+                    <div class="question-header">
+                        <strong>Question @counter : @q.QuestionText</strong>
+                    </div>
+                    <div class="question-body">
+                        <div class="option" data-value="A">
+                            <label>
+                                <input type="radio" name="q_@q.QuestionId" value="A" class="radio-option" />
+                                A) @q.OptionA
+                            </label>
+                        </div>
+                        <div class="option" data-value="B">
+                            <label>
+                                <input type="radio" name="q_@q.QuestionId" value="B" class="radio-option" />
+                                B) @q.OptionB
+                            </label>
+                        </div>
+                        <div class="option" data-value="C">
+                            <label>
+                                <input type="radio" name="q_@q.QuestionId" value="C" class="radio-option" />
+                                C) @q.OptionC
+                            </label>
+                        </div>
+                        <div class="option" data-value="D">
+                            <label>
+                                <input type="radio" name="q_@q.QuestionId" value="D" class="radio-option" />
+                                D) @q.OptionD
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                counter++;
+            }
+        }
+
+        <div class="quiz-footer">
+            <button type="submit" class="btn-submit">✅ Submit Quiz</button>
+            <a href="/Student/MyCourses" class="btn-cancel">❌ Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    function updateProgress() {
+        var total = @ViewBag.QuestionsCount;
+        var radios = document.querySelectorAll('.radio-option');
+        var checkedRadios = document.querySelectorAll('.radio-option:checked');
+        var answered = checkedRadios.length;
+        var percentage = (answered / total) * 100;
+
+        var progressFill = document.getElementById('progressFill');
+        var answeredCount = document.getElementById('answeredCount');
+
+        if (progressFill) {
+            progressFill.style.width = percentage + '%';
+        }
+        if (answeredCount) {
+            answeredCount.innerText = answered + ' / ' + total;
+        }
+    }
+
+    document.querySelectorAll('.option').forEach(function(option) {
+        option.addEventListener('click', function(e) {
+            if (e.target.type !== 'radio') {
+                var radio = this.querySelector('.radio-option');
+                if (radio) {
+                    radio.checked = true;
+                    updateProgress();
+                    var changeEvent = new Event('change', { bubbles: true });
+                    radio.dispatchEvent(changeEvent);
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('.radio-option').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            updateProgress();
+            var parentOption = radio.closest('.option');
+            if (parentOption) {
+                var siblings = parentOption.parentElement.querySelectorAll('.option');
+                siblings.forEach(function(sib) {
+                    sib.classList.remove('selected');
+                });
+                parentOption.classList.add('selected');
+            }
+        });
+
+        if (radio.checked) {
+            var parentOption = radio.closest('.option');
+            if (parentOption) {
+                parentOption.classList.add('selected');
+            }
+        }
+    });
+
+    updateProgress();
+</script>

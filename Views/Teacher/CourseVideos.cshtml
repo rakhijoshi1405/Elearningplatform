@@ -1,0 +1,134 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Course Videos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .videos-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 20px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+
+        .page-header h2 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+    .btn-upload {
+        background: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+    }
+
+    .videos-table {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 50px;
+        background: white;
+        border-radius: 16px;
+    }
+</style>
+
+<div class="videos-container">
+    <div class="page-header">
+        <h2>Videos for: @ViewBag.CourseTitle</h2>
+        <a href="/Teacher/UploadVideo?courseId=@ViewBag.CourseId" class="btn-upload">+ Upload New Video</a>
+    </div>
+
+    @if (ViewBag.Videos != null && ((System.Collections.IList)ViewBag.Videos).Count > 0)
+    {
+        <div class="videos-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Upload Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var video in ViewBag.Videos)
+                    {
+                        <tr>
+                            <td>@video.Title</td>
+                            <td>@video.Description</td>
+                            <td>@video.UploadDate.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <button class="btn-delete" onclick="deleteVideo(@video.VideoContentId)">Delete</button>
+                                </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <p>No videos uploaded yet.</p>
+        </div>
+    }
+
+    <a href="/Teacher/MyCourses" style="display: inline-block; margin-top: 20px; color: #6c757d;">← Back to My Courses</a>
+</div>
+
+<script>
+    function deleteVideo(videoId) {
+        if (confirm('Delete this video?')) {
+            $.post('/Teacher/DeleteVideo', { videoContentId: videoId })
+                .done(function (response) {
+                    if (response.success) location.reload();
+                    else alert('Error: ' + response.message);
+                })
+                .fail(function () { alert('Error deleting video'); });
+        }
+    }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

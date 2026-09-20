@@ -1,0 +1,184 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "View Questions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 20px;
+    }
+
+    .page-header {
+        margin-bottom: 25px;
+    }
+
+        .page-header h2 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+    .quiz-info {
+        background: #e8f4fd;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .questions-table {
+        background: white;
+        border-radius: 16px;
+        overflow-x: auto;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background: #f8f9fa;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        font-size: 13px;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        display: inline-block;
+    }
+
+    .btn-add {
+        background: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .alert-warning {
+        background: #fff3cd;
+        color: #856404;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .btn-back {
+        display: inline-block;
+        margin-top: 20px;
+        color: #6c757d;
+        text-decoration: none;
+    }
+</style>
+
+<div class="container">
+    <div class="page-header">
+        <h2>View Questions</h2>
+        @if (ViewBag.NoQuiz != true && ViewBag.QuestionsCount > 0)
+        {
+            <a href="/Teacher/AddQuestions?quizId=@ViewBag.QuizId" class="btn-add">+ Add New Question</a>
+        }
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (ViewBag.NoQuiz == true)
+    {
+        <div class="alert-warning">
+            No quiz found for this course.
+            <a href="/Teacher/CreateQuiz?courseId=@ViewBag.CourseId">Create Quiz Now</a>
+        </div>
+    }
+    else if (ViewBag.QuestionsCount == 0)
+    {
+        <div class="alert-warning">
+            <strong>Quiz:</strong> @ViewBag.QuizTitle<br />
+            No questions added yet.
+            <a href="/Teacher/AddQuestions?quizId=@ViewBag.QuizId">Add Questions</a>
+        </div>
+    }
+    else if (ViewBag.Questions != null && ((System.Collections.IList)ViewBag.Questions).Count > 0)
+    {
+        <div class="quiz-info">
+            <strong>Quiz:</strong> @ViewBag.QuizTitle &nbsp;|&nbsp;
+            <strong>Total Questions:</strong> @ViewBag.QuestionsCount
+        </div>
+
+        <div class="questions-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Question</th>
+                        <th>Option A</th>
+                        <th>Option B</th>
+                        <th>Option C</th>
+                        <th>Option D</th>
+                        <th>Correct Answer</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int counter = 1;
+                    }
+                    @foreach (var q in ViewBag.Questions)
+                    {
+                        <tr>
+                            <td>@counter</td>
+                            <td>@q.QuestionText</td>
+                            <td>@q.OptionA</td>
+                            <td>@q.OptionB</td>
+                            <td>@q.OptionC</td>
+                            <td>@q.OptionD</td>
+                            <td><strong>@q.CorrectAnswer</strong></td>
+                            <td>
+                                <a href="/Teacher/DeleteQuestion?questionId=@q.QuestionId" class="btn-delete" onclick="return confirm('Are you sure?')">Delete</a>
+                            </td>
+                        </tr>
+                        counter++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert-warning">No questions found.</div>
+    }
+
+    <div>
+        <a href="/Teacher/MyCourses" class="btn-back">← Back to Courses</a>
+    </div>
+</div>

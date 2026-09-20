@@ -1,0 +1,152 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "All Quizzes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 20px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+
+        .page-header h2 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+    .btn-create {
+        background: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+    }
+
+    .quizzes-table {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .btn-info {
+        background: #3498db;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        display: inline-block;
+        margin: 2px;
+    }
+
+    .btn-warning {
+        background: #ffc107;
+        color: #333;
+        padding: 5px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        display: inline-block;
+        margin: 2px;
+    }
+
+    .btn-danger {
+        background: #dc3545;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        display: inline-block;
+        margin: 2px;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="page-header">
+        <h2>All Quizzes for: @ViewBag.CourseTitle</h2>
+        <a href="/Teacher/CreateQuiz?courseId=@ViewBag.CourseId" class="btn-create">+ Create New Quiz</a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (ViewBag.Quizzes != null && ((System.Collections.IList)ViewBag.Quizzes).Count > 0)
+    {
+        <div class="quizzes-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Quiz Title</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int counter = 1; }
+                    @foreach (var quiz in ViewBag.Quizzes)
+                    {
+                        <tr>
+                            <td>@counter</td>
+                            <td>@quiz.Title</td>
+                            <td>
+                                <a href="/Teacher/ViewQuestions?courseId=@ViewBag.CourseId&quizId=@quiz.QuizId" class="btn-info">View Questions</a>
+                                <a href="/Teacher/AddQuestions?quizId=@quiz.QuizId" class="btn-warning">Add Questions</a>
+                                <a href="/Teacher/DeleteQuiz?quizId=@quiz.QuizId" class="btn-danger" onclick="return confirm('Delete this quiz?')">Delete Quiz</a>
+                                </td>
+                        </tr>
+                        counter++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div style="text-align: center; padding: 50px; background: white; border-radius: 16px;">
+            <p>No quizzes created yet.</p>
+        </div>
+    }
+
+    <a href="/Teacher/MyCourses" style="display: inline-block; margin-top: 20px; color: #6c757d;">← Back to My Courses</a>
+</div>

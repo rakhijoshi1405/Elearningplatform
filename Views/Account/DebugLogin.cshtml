@@ -1,0 +1,44 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Debug Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Debug Login Information</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+@if (ViewBag.Users != null)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Role</th>
+                <th>Approved</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in ViewBag.Users)
+            {
+                <tr>
+                    <td>@user.UserId</td>
+                    <td>@user.Username</td>
+                    <td>@user.Password</td>
+                    <td>@user.Role</td>
+                    <td>@user.IsApproved</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div>
+    <a href="/Account/Login" class="btn btn-primary">Go to Login</a>
+</div>

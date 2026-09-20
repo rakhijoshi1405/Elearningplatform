@@ -1,0 +1,88 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Teacher Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dashboard-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .welcome-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+        .welcome-card h2 {
+            font-size: 28px;
+            margin: 0 0 10px;
+        }
+
+        .welcome-card p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .btn-primary {
+        background: #667eea;
+        color: white;
+        padding: 14px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+        }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+        padding: 14px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+        }
+</style>
+
+<div class="dashboard-container">
+    <div class="welcome-card">
+        <h2>Teacher Dashboard</h2>
+        <p>Welcome, @ViewBag.Username!</p>
+    </div>
+
+    <div class="action-buttons">
+        <a href="/Teacher/MyCourses" class="btn-primary">📚 Manage My Courses</a>
+        <a href="/Home/Index" class="btn-secondary">🏠 Go to Home</a>
+    </div>
+</div>

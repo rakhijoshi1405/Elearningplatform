@@ -1,0 +1,304 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Home Page";
+}
+
+<style type="text/css">
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 80px 40px;
+        border-radius: 20px;
+        text-align: center;
+        margin: 20px 0 40px;
+        color: white;
+    }
+
+    .logo-text {
+        font-size: 56px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+
+    .tagline {
+        font-size: 18px;
+        opacity: 0.95;
+        margin-bottom: 30px;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .btn-register {
+        background: white;
+        color: #667eea;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+        .btn-register:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            text-decoration: none;
+            color: #667eea;
+        }
+
+    .btn-login {
+        background: transparent;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        border: 2px solid white;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+        .btn-login:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-3px);
+            text-decoration: none;
+        }
+
+    .welcome-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        margin-bottom: 40px;
+    }
+
+    .welcome-name {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .btn-dashboard {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 35px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        margin: 5px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-dashboard:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+            text-decoration: none;
+            color: white;
+        }
+
+    .btn-logout {
+        background: #dc3545;
+        color: white;
+        padding: 12px 35px;
+        border-radius: 30px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+        .btn-logout:hover {
+            background: #c82333;
+            transform: translateY(-3px);
+        }
+
+    .features-section {
+        text-align: center;
+        margin: 50px 0;
+    }
+
+    .features-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 40px;
+    }
+
+    .features-grid {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .feature-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px 25px;
+        text-align: center;
+        flex: 1;
+        min-width: 200px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+    .feature-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+
+    .feature-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .feature-desc {
+        font-size: 13px;
+        color: #666;
+    }
+
+    .stats-section {
+        background: #f8f9fa;
+        border-radius: 20px;
+        padding: 40px;
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    .stats-grid {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 36px;
+        font-weight: 700;
+        color: #667eea;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: #666;
+    }
+</style>
+
+@{
+    bool isLoggedIn = User.Identity.IsAuthenticated && Session["UserId"] != null;
+}
+
+<div class="hero-section">
+    <div class="logo-text">AnantVidya</div>
+    <div class="tagline">Welcome to our E-Learning platform. Learn, teach, and grow with us.</div>
+
+    @if (!isLoggedIn)
+    {
+        Session.Clear();
+        <div class="btn-group">
+            <a href="/Account/Register" class="btn-register">📝 Register</a>
+            <a href="/Account/Login" class="btn-login">🔐 Login</a>
+        </div>
+    }
+    else
+    {
+        var role = (Session["Role"] as string ?? "").ToLower();
+        var username = Session["Username"] as string ?? User.Identity.Name;
+
+        <div class="welcome-card">
+            <div class="welcome-name">Welcome back, @username!</div>
+            <div>
+                @if (role == "admin")
+                {
+                    <a href="/Admin/Index" class="btn-dashboard">Go to Admin Dashboard</a>
+                }
+                else if (role == "teacher")
+                {
+                    <a href="/Teacher/MyCourses" class="btn-dashboard">Go to My Courses</a>
+                }
+                else if (role == "student")
+                {
+                    <a href="/Student/Index" class="btn-dashboard">Go to Student Dashboard</a>
+                }
+                else
+                {
+                    <a href="/Home/Dashboard" class="btn-dashboard">Go to Dashboard</a>
+                }
+
+                <form method="post" action="/Account/Logout" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-logout">🚪 Logout</button>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="features-section">
+    <div class="features-title">Why Choose AnantVidya?</div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <div class="feature-title">Learn Anytime</div>
+            <div class="feature-desc">Access courses 24/7 from anywhere</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">👨‍🏫</div>
+            <div class="feature-title">Expert Teachers</div>
+            <div class="feature-desc">Learn from industry experts</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎓</div>
+            <div class="feature-title">Get Certified</div>
+            <div class="feature-desc">Earn certificates on completion</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <div class="feature-title">Interactive Quizzes</div>
+            <div class="feature-desc">Test your knowledge with quizzes</div>
+        </div>
+    </div>
+</div>
+
+<div class="stats-section">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Students Enrolled</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Expert Teachers</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">Courses Available</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">1000+</div>
+            <div class="stat-label">Certificates Issued</div>
+        </div>
+    </div>
+</div>

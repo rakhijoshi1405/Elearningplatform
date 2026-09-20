@@ -1,0 +1,316 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Course Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .course-header {
+        background: linear-gradient(135deg, #0f2b3d 0%, #1a4a6f 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+    }
+
+    .course-title {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .course-instructor {
+        font-size: 16px;
+        margin-bottom: 20px;
+        opacity: 0.9;
+    }
+
+    .course-stats {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .stat {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.2);
+        padding: 5px 12px;
+        border-radius: 20px;
+    }
+
+    .btn-enroll {
+        background: #28a745;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        margin-top: 15px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-enroll:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+        }
+
+    .btn-back {
+        display: inline-block;
+        margin-top: 30px;
+        color: #6c757d;
+        text-decoration: none;
+    }
+
+    .nav-tabs {
+        display: flex;
+        gap: 30px;
+        border-bottom: 2px solid #e0e0e0;
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+        flex-wrap: wrap;
+    }
+
+    .nav-tab {
+        font-size: 16px;
+        font-weight: 600;
+        color: #666;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 10px 0;
+        transition: all 0.3s ease;
+    }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+        }
+
+    .tab-content {
+        display: none;
+        padding: 20px 0;
+    }
+
+        .tab-content.active {
+            display: block;
+        }
+
+    .section-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .what-you-learn {
+        background: #f8f9fa;
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    .skill-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .course-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .course-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s ease;
+    }
+
+        .course-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .course-item h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+    .course-duration {
+        font-size: 13px;
+        color: #666;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .duration-badge {
+        background: #e8f4fd;
+        color: #3498db;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .testimonial-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+
+    .testimonial-text {
+        font-size: 14px;
+        color: #555;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
+
+    .testimonial-author {
+        font-weight: 600;
+        color: #333;
+    }
+</style>
+
+@{
+    var course = ViewBag.Course;
+    var instructor = ViewBag.Instructor;
+    var totalDuration = ViewBag.TotalDuration;
+    var videoCount = ViewBag.VideoCount;
+}
+
+<div class="course-header">
+    <div class="course-title">@course.Title</div>
+    <div class="course-instructor">Instructor: @instructor</div>
+    <div class="course-stats">
+        <div class="stat">📊 Beginner Level</div>
+        <div class="stat">🎬 @videoCount Videos</div>
+        <div class="stat">⏱️ Total Duration: @totalDuration</div>
+        <div class="stat">🏆 Certificate Available</div>
+    </div>
+    <div class="course-description">@course.Description</div>
+    <a href="/Payment/Pay?courseId=@course.CourseId" class="btn-enroll">Enroll Now →</a>
+</div>
+
+<div class="nav-tabs">
+    <button class="nav-tab active" data-tab="about">About</button>
+    <button class="nav-tab" data-tab="outcomes">Outcomes</button>
+    <button class="nav-tab" data-tab="courses">Courses</button>
+    <button class="nav-tab" data-tab="testimonials">Testimonials</button>
+</div>
+
+<!-- About Tab -->
+<div id="about" class="tab-content active">
+    <div class="section-title">About this Course</div>
+    <p style="color: #555; line-height: 1.6; margin-bottom: 25px;">@course.Description</p>
+
+    <div class="what-you-learn">
+        <div class="section-title" style="margin-bottom: 15px;">What you'll learn</div>
+        <div class="skills-grid">
+            <div class="skill-item">✓ Programming fundamentals</div>
+            <div class="skill-item">✓ Data structures</div>
+            <div class="skill-item">✓ Problem solving</div>
+            <div class="skill-item">✓ Algorithm design</div>
+            <div class="skill-item">✓ Database concepts</div>
+            <div class="skill-item">✓ Web development basics</div>
+        </div>
+    </div>
+</div>
+
+<!-- Outcomes Tab -->
+<div id="outcomes" class="tab-content">
+    <div class="section-title">Learning Outcomes</div>
+    <div class="skills-grid">
+        <div class="skill-item">🎯 Build real-world applications</div>
+        <div class="skill-item">🎯 Master programming concepts</div>
+        <div class="skill-item">🎯 Work with databases</div>
+        <div class="skill-item">🎯 Create interactive websites</div>
+        <div class="skill-item">🎯 Analyze and visualize data</div>
+        <div class="skill-item">🎯 Earn a career certificate</div>
+    </div>
+</div>
+
+<!-- Courses Tab -->
+<div id="courses" class="tab-content">
+    <div class="section-title">Courses in this Program (@videoCount Videos)</div>
+    <div class="course-list">
+        @if (ViewBag.Videos != null && ((System.Collections.IList)ViewBag.Videos).Count > 0)
+        {
+            int counter = 1;
+            foreach (var video in ViewBag.Videos)
+            {
+                <div class="course-item">
+                    <h4>@counter. @video.Title</h4>
+                    <p style="color: #666; font-size: 14px;">@video.Description</p>
+                    <div class="course-duration">
+                        <span>⏱️ Duration:</span>
+                        <span class="duration-badge">@(video.Duration != null && video.Duration > 0 ? video.Duration + " minutes" : "Self-paced")</span>
+                    </div>
+                </div>
+                counter++;
+            }
+        }
+        else
+        {
+            <div class="course-item">
+                <h4>Coming Soon</h4>
+                <p>More courses will be added soon.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Testimonials Tab -->
+<div id="testimonials" class="tab-content">
+    <div class="section-title">What students are saying</div>
+    <div class="testimonial-card">
+        <div class="testimonial-text">"This course was amazing! The instructor explains concepts clearly and the projects are very practical. Highly recommended for beginners!"</div>
+        <div class="testimonial-author">- Priya Sharma</div>
+    </div>
+    <div class="testimonial-card">
+        <div class="testimonial-text">"Excellent content! I learned so much and got a certificate at the end. The support from the community is great."</div>
+        <div class="testimonial-author">- Rahul Verma</div>
+    </div>
+    <div class="testimonial-card">
+        <div class="testimonial-text">"Best course for learning programming. The hands-on projects helped me build my portfolio."</div>
+        <div class="testimonial-author">- Neha Gupta</div>
+    </div>
+</div>
+
+<div>
+    <a href="/Student/MyCourses" class="btn-back">← Back to My Courses</a>
+    <a href="/Student/AvailableCourses" class="btn-back" style="margin-left: 15px;">← Browse More Courses</a>
+</div>
+
+<script>
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            this.classList.add('active');
+            document.getElementById(this.getAttribute('data-tab')).classList.add('active');
+        });
+    });
+</script>

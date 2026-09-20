@@ -1,0 +1,163 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Certificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .certificate-wrapper {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .certificate {
+        background: white;
+        border: 15px double #d4af37;
+        padding: 50px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        border-radius: 10px;
+    }
+
+    .certificate-header {
+        margin-bottom: 30px;
+    }
+
+    .certificate-icon {
+        font-size: 60px;
+        margin-bottom: 10px;
+    }
+
+    .certificate-title {
+        font-size: 42px;
+        color: #2c3e50;
+        letter-spacing: 3px;
+        margin: 0;
+        font-weight: bold;
+    }
+
+    .certificate-subtitle {
+        font-size: 18px;
+        color: #7f8c8d;
+        margin-top: 5px;
+    }
+
+    .certificate-body {
+        margin: 40px 0;
+    }
+
+    .presented-text {
+        font-size: 18px;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .student-name {
+        font-size: 48px;
+        color: #c0392b;
+        margin: 15px 0;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .course-text {
+        font-size: 18px;
+        color: #555;
+        margin-top: 20px;
+    }
+
+    .course-name {
+        font-size: 32px;
+        color: #2980b9;
+        margin: 10px 0;
+        font-weight: bold;
+    }
+
+    .certificate-footer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #ddd;
+    }
+
+    .issue-date {
+        font-size: 14px;
+        color: #666;
+        margin: 5px 0;
+    }
+
+    .certificate-number {
+        font-size: 12px;
+        color: #999;
+        margin: 5px 0;
+    }
+
+    .signature {
+        margin-top: 30px;
+        font-family: 'Brush Script MT', cursive;
+        font-size: 24px;
+        color: #555;
+    }
+
+    .btn-group {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .btn-print {
+        background: #3498db;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        margin: 5px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-back {
+        background: #95a5a6;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: inline-block;
+        margin: 5px;
+    }
+
+        .btn-print:hover, .btn-back:hover {
+            opacity: 0.8;
+            text-decoration: none;
+            color: white;
+        }
+</style>
+
+<div class="certificate-wrapper">
+    <div class="certificate">
+        <div class="certificate-header">
+            <div class="certificate-icon">🏅</div>
+            <h1 class="certificate-title">CERTIFICATE OF COMPLETION</h1>
+            <div class="certificate-subtitle">Awarded to</div>
+        </div>
+
+        <div class="certificate-body">
+            <div class="student-name">@ViewBag.StudentName</div>
+            <div class="course-text">for successfully completing the course</div>
+            <div class="course-name">@ViewBag.Course.Title</div>
+        </div>
+
+        <div class="certificate-footer">
+            <div class="issue-date">📅 Issue Date: @DateTime.Now.ToString("MMMM dd, yyyy")</div>
+            <div class="certificate-number">🔢 Certificate No: @ViewBag.Certificate.CertificateNumber</div>
+            <div class="signature">~ AnantVidya ~</div>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button onclick="window.print()" class="btn-print">🖨️ Print Certificate</button>
+        <a href="/Student/MyCourses" class="btn-back">📚 Back to Courses</a>
+    </div>
+</div>

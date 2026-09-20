@@ -1,0 +1,32 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Create Test Teacher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create Test Teacher</h2>
+
+@if (ViewBag.Success == true)
+{
+    <div class="alert alert-success">
+        <strong>Success!</strong> @ViewBag.Message
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        <strong>Error!</strong> @ViewBag.Message
+    </div>
+}
+
+<div class="alert alert-info">
+    <h4>Test Teacher Credentials:</h4>
+    <p><strong>Username:</strong> teacher</p>
+    <p><strong>Password:</strong> 123456</p>
+    <p><strong>Role:</strong> Teacher (Auto-approved)</p>
+</div>
+
+<div>
+    <a href="/Account/Login" class="btn btn-primary">Go to Login</a>
+</div>

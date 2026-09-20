@@ -1,0 +1,20 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h2>Welcome to Your Dashboard</h2>
+
+<div class="alert alert-info">
+    <p>Welcome, <strong>@Session["Username"]</strong>! </p>
+    <p>Role: <strong>@Session["Role"]</strong></p>
+</div>
+
+<p>You are being redirected to your role-specific dashboard...</p>
+
+<script>
+    // Auto-redirect after 3 seconds if manual redirect fails
+    setTimeout(function () {
+        window.location.href = '@Url.Action("Index", "Home")';
+    }, 3000);
+</script>

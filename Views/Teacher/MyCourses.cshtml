@@ -1,0 +1,231 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "My Courses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .courses-container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 20px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+
+        .page-header h2 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+    .btn-create {
+        background: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .btn-create:hover {
+            background: #218838;
+            text-decoration: none;
+            color: white;
+        }
+
+    .courses-table {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #2c3e50;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+    }
+
+    tr:hover {
+        background: #f8f9fa;
+    }
+
+    .course-title {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .course-desc {
+        color: #666;
+        font-size: 13px;
+        max-width: 400px;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-video {
+        background: #3498db;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        text-align: center;
+    }
+
+        .btn-video:hover {
+            background: #2980b9;
+            text-decoration: none;
+            color: white;
+        }
+
+    .btn-quiz {
+        background: #28a745;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        text-align: center;
+    }
+
+        .btn-quiz:hover {
+            background: #218838;
+            text-decoration: none;
+            color: white;
+        }
+
+    .btn-view {
+        background: #ffc107;
+        color: #333;
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        text-align: center;
+    }
+
+        .btn-view:hover {
+            background: #e0a800;
+            text-decoration: none;
+            color: #333;
+        }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 12px;
+        text-align: center;
+    }
+
+        .btn-delete:hover {
+            background: #c82333;
+            text-decoration: none;
+            color: white;
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 50px;
+        background: white;
+        border-radius: 16px;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .alert-danger {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="courses-container">
+    <div class="page-header">
+        <h2>My Courses</h2>
+        <a href="/Teacher/CreateCourse" class="btn-create">+ Create New Course</a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    @if (ViewBag.Courses != null && ((System.Collections.IList)ViewBag.Courses).Count > 0)
+    {
+        <div class="courses-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var course in ViewBag.Courses)
+                    {
+                        <tr>
+                            <td class="course-title">@course.Title</td>
+                            <td class="course-desc">@course.Description</td>
+                            <td class="action-buttons">
+                                <a href="/Teacher/CourseVideos?courseId=@course.CourseId" class="btn-video">🎬 Manage Videos</a>
+                                <a href="/Teacher/CreateQuiz?courseId=@course.CourseId" class="btn-quiz">📝 Create Quiz</a>
+                                <a href="/Teacher/ViewAllQuizzes?courseId=@course.CourseId" class="btn-view">👁️ View All Quizzes</a>
+                                <a href="/Teacher/DeleteCourse?courseId=@course.CourseId" class="btn-delete" onclick="return confirm('Delete this course?')">🗑️ Delete Course</a>
+                                </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <p>📚 No courses created yet. Click "Create New Course" to start.</p>
+        </div>
+    }
+</div>

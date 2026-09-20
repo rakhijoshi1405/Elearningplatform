@@ -1,0 +1,126 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Student Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dashboard-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .welcome-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+        .welcome-card h2 {
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            font-weight: 600;
+        }
+
+        .welcome-card p {
+            font-size: 16px;
+            opacity: 0.95;
+            margin: 0;
+        }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .btn-action {
+        padding: 14px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .btn-primary {
+        background: #667eea;
+        color: white;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+
+    .btn-success {
+        background: #28a745;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+            box-shadow: 0 5px 15px rgba(40,167,69,0.3);
+        }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+            box-shadow: 0 5px 15px rgba(108,117,125,0.3);
+        }
+
+    .info-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        border: 1px solid #e0e0e0;
+    }
+
+        .info-card p {
+            color: #666;
+            margin: 0;
+            font-size: 14px;
+        }
+</style>
+
+<div class="dashboard-container">
+    <div class="welcome-card">
+        <h2>Student Dashboard</h2>
+        <p>Welcome, @ViewBag.Username!</p>
+    </div>
+
+    <div class="action-buttons">
+        <a href="/Student/MyCourses" class="btn-action btn-primary">📚 My Enrolled Courses</a>
+        <a href="/Student/AvailableCourses" class="btn-action btn-success">🛒 Browse Available Courses</a>
+        <a href="/Home/Index" class="btn-action btn-secondary">🏠 Go to Home</a>
+    </div>
+
+    <div class="info-card">
+        <p>From here you can see your enrolled courses or find new ones.</p>
+    </div>
+</div>

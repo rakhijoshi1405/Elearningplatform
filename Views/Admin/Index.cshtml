@@ -1,0 +1,318 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .dashboard-container {
+        padding: 20px;
+    }
+
+    .dashboard-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .dashboard-subtitle {
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .stats-grid {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 32px;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin: 20px 0 15px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #667eea;
+    }
+
+    .data-table {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow-x: auto;
+        margin-bottom: 25px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background: #f8f9fa;
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 13px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    td {
+        padding: 10px 15px;
+        font-size: 13px;
+        border-bottom: 1px solid #eee;
+    }
+
+    tr:hover {
+        background: #f8f9fa;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 15px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .badge-approved {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .alert-card {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-review {
+        background: #ffc107;
+        color: #856404;
+        padding: 6px 18px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 13px;
+    }
+
+    .btn-home {
+        background: #667eea;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 25px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+        .btn-home:hover {
+            background: #5a67d8;
+            text-decoration: none;
+            color: white;
+        }
+</style>
+
+<div class="dashboard-container">
+    <div class="dashboard-title">Admin Dashboard</div>
+    <div class="dashboard-subtitle">Manage your platform</div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">@ViewBag.TotalUsers</div>
+            <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@ViewBag.TotalTeachers</div>
+            <div class="stat-label">Teachers</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@ViewBag.TotalStudents</div>
+            <div class="stat-label">Students</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@ViewBag.TotalCourses</div>
+            <div class="stat-label">Courses</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@ViewBag.TotalQuizzes</div>
+            <div class="stat-label">Quizzes</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">@ViewBag.TotalQuestions</div>
+            <div class="stat-label">Questions</div>
+        </div>
+    </div>
+
+    <!-- Pending Alert -->
+    @if (ViewBag.PendingTeachers > 0)
+    {
+        <div class="alert-card">
+            <span><strong>@ViewBag.PendingTeachers</strong> teacher(s) waiting for approval</span>
+            <a href="/Admin/PendingTeachers" class="btn-review">Review</a>
+        </div>
+    }
+
+    <!-- Admin Section -->
+    <div class="section-title">👑 Administrators</div>
+    <div class="data-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (ViewBag.Admins != null)
+                {
+                    foreach (var admin in ViewBag.Admins)
+                    {
+                        <tr>
+                            <td>@admin.UserId</td>
+                            <td>@admin.Username</td>
+                            <td>@admin.Email</td>
+                            <td><span class="badge badge-approved">Active</span></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Teachers Section -->
+    <div class="section-title">👨‍🏫 Teachers</div>
+    <div class="data-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (ViewBag.TeachersList != null)
+                {
+                    foreach (var teacher in ViewBag.TeachersList)
+                    {
+                        <tr>
+                            <td>@teacher.UserId</td>
+                            <td>@teacher.Username</td>
+                            <td>@teacher.Email</td>
+                            <td>
+                                @if (teacher.IsApproved)
+                                {
+                                    <span class="badge badge-approved">Approved</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pending">Pending</span>
+                                }
+                                </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Students Section -->
+    <div class="section-title">🎓 Students</div>
+    <div class="data-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (ViewBag.StudentsList != null)
+                {
+                    foreach (var student in ViewBag.StudentsList)
+                    {
+                        <tr>
+                            <td>@student.UserId</td>
+                            <td>@student.Username</td>
+                            <td>@student.Email</td>
+                            <td><span class="badge badge-approved">Active</span></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Courses Section -->
+    <div class="section-title">📚 All Courses</div>
+    <div class="data-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Course Title</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (ViewBag.AllCourses != null)
+                {
+                    foreach (var course in ViewBag.AllCourses)
+                    {
+                        <tr>
+                            <td>@course.CourseId</td>
+                            <td>@course.Title</td>
+                            <td>₹@course.Price</td>
+                        </tr>
+                        }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Action Buttons -->
+    <div>
+        <a href="/Home/Index" class="btn-home">Go to Home</a>
+    </div>
+</div>

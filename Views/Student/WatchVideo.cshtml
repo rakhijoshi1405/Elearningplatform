@@ -1,0 +1,200 @@
+﻿@inherits System.Web.Mvc.WebViewPage<Elearningplatform.Models.VideoCourseContent>
+
+@{
+    ViewBag.Title = "Watch Video";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .video-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .video-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .video-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 20px 25px;
+        color: white;
+    }
+
+        .video-header h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+    .video-player {
+        background: #000;
+        text-align: center;
+    }
+
+        .video-player video {
+            width: 100%;
+            max-height: 500px;
+            outline: none;
+        }
+
+    .video-controls {
+        background: #f8f9fa;
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .speed-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .speed-control label {
+            font-size: 13px;
+            color: #555;
+            font-weight: 500;
+        }
+
+    .speed-select {
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: white;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+        .speed-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+    .current-speed {
+        font-size: 13px;
+        color: #28a745;
+        font-weight: 500;
+    }
+
+    .video-description {
+        padding: 20px 25px;
+        border-top: 1px solid #eee;
+    }
+
+        .video-description p {
+            margin: 0;
+            color: #555;
+            line-height: 1.5;
+        }
+
+    .btn-back {
+        display: inline-block;
+        background: #6c757d;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+
+        .btn-back:hover {
+            background: #5a6268;
+            text-decoration: none;
+            color: white;
+        }
+</style>
+
+<div class="video-container">
+    <div class="video-card">
+        <div class="video-header">
+            <h2>🎬 @Model.Title</h2>
+        </div>
+
+        <div class="video-player">
+            <video id="videoPlayer" style="width: 100%; max-height: 500px;" controls>
+                <source src="@Model.VideoFilePath" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="video-controls">
+            <div class="speed-control">
+                <label>Playback Speed:</label>
+                <select id="playbackSpeed" class="speed-select">
+                    <option value="0.5">0.5x (Slow)</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1.0" selected>1.0x (Normal)</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="1.75">1.75x</option>
+                    <option value="2.0">2.0x (Fast)</option>
+                </select>
+            </div>
+            <div class="current-speed" id="currentSpeedDisplay">
+                Current Speed: 1.0x (Normal)
+            </div>
+        </div>
+
+        <div class="video-description">
+            <p>@Model.Description</p>
+        </div>
+    </div>
+
+    <a href="/Student/CourseVideos?courseId=@Model.CourseId" class="btn-back">← Back to Videos</a>
+</div>
+
+<script>
+    // Wait for DOM to load
+    document.addEventListener('DOMContentLoaded', function () {
+        var video = document.getElementById('videoPlayer');
+        var speedSelect = document.getElementById('playbackSpeed');
+        var speedDisplay = document.getElementById('currentSpeedDisplay');
+
+        // Function to set playback speed
+        function setPlaybackSpeed(speed) {
+            if (video) {
+                video.playbackRate = parseFloat(speed);
+
+                // Update display
+                if (speed == 1.0) {
+                    speedDisplay.innerHTML = 'Current Speed: 1.0x (Normal)';
+                } else if (speed < 1.0) {
+                    speedDisplay.innerHTML = 'Current Speed: ' + speed + 'x (Slow)';
+                } else {
+                    speedDisplay.innerHTML = 'Current Speed: ' + speed + 'x (Fast)';
+                }
+            }
+        }
+
+        // Change playback speed when dropdown changes
+        if (speedSelect) {
+            speedSelect.addEventListener('change', function () {
+                var speed = this.value;
+                setPlaybackSpeed(speed);
+            });
+        }
+
+        // Set initial speed
+        if (video && speedSelect) {
+            setPlaybackSpeed(speedSelect.value);
+        }
+
+        // Optional: Show when video is loaded
+        if (video) {
+            video.addEventListener('loadedmetadata', function () {
+                console.log('Video loaded, playback speed supported: ' + ('playbackRate' in video));
+            });
+        }
+    });
+</script>

@@ -1,0 +1,188 @@
+﻿@inherits System.Web.Mvc.WebViewPage<dynamic>
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .register-container {
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 35px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+        .register-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .register-header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+            .form-group input:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+            }
+
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+            .form-group select:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+            }
+
+    .btn-register {
+        width: 100%;
+        padding: 12px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+        .btn-register:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102,126,234,0.3);
+        }
+
+    .login-link {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+            .login-link a:hover {
+                text-decoration: underline;
+            }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #28a745;
+    }
+
+    .alert-danger {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 4px solid #dc3545;
+    }
+</style>
+
+<div class="register-container">
+    <div class="register-header">
+        <h2>Create an Account</h2>
+        <p>Join us to start learning</p>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form method="post" action="/Account/Register">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="Username" placeholder="Choose a username" required />
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="Password" placeholder="Create a password" required />
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="Email" placeholder="Enter your email" required />
+        </div>
+
+        <div class="form-group">
+            <label>Register as a:</label>
+            <select name="role" class="form-control">
+                <option value="Student">Student</option>
+                <option value="Teacher">Teacher</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-register">Register</button>
+    </form>
+
+    <div class="login-link">
+        <a href="/Account/Login">Already have an account? Login</a>
+    </div>
+</div>
